@@ -1,15 +1,15 @@
-/* --- إعدادات لوحة الألوان الجديدة (Tech Theme) --- */
+/* --- Tech Theme Variables --- */
 :root {
-    --bg-color: #0a192f; /* أزرق داكن جداً خلفية */
-    --card-bg: #112240; /* أزرق غامق للبطاقات */
-    --text-main: #ccd6f6; /* رمادي فاتح جداً للنصوص */
-    --text-sub: #8892b0; /* رمادي مزرق للنصوص الثانوية */
-    --accent-color: #64ffda; /* أزرق فاتح "سيان" للتميز */
+    --bg-color: #0a192f; /* Dark background */
+    --card-bg: #112240; /* Card background */
+    --text-main: #ccd6f6; /* Main text color */
+    --text-sub: #8892b0; /* Secondary text color */
+    --accent-color: #64ffda; /* Cyan accent color */
     --shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
     --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-/* --- الإعدادات العامة للموقع --- */
+/* --- General Styles --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -17,13 +17,18 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background-image: url('images/vintage-wallpaper.png');
+    background-size: cover; 
+    background-position: center;
+    background-attachment: fixed; 
+    
     color: var(--text-main);
-    font-family: 'SF Pro Display', -apple-system, system-ui, sans-serif; /* خط عصري */
+    font-family: 'SF Pro Display', -apple-system, system-ui, sans-serif; 
     line-height: 1.6;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    margin: 0;
 }
 
 a {
@@ -32,17 +37,17 @@ a {
     transition: var(--transition);
 }
 
-/* --- شريط التنقل العلوي العصري (Glassmorphism) --- */
+/* --- Header / Navbar (Glassmorphism) --- */
 .header {
     position: sticky;
     top: 0;
-    background-color: rgba(10, 25, 47, 0.85); /* شفافية خفيفة */
-    backdrop-filter: blur(10px); /* تأثير ضبابي زجاجي */
+    background-color: rgba(10, 25, 47, 0.85); /* Light transparency */
+    backdrop-filter: blur(10px); /* Glass blur effect */
     padding: 20px 50px;
     display: flex;
     justify-content: flex-end;
     z-index: 1000;
-    box-shadow: 0 10px 30px -10px rgba(2,12,27,0.7);
+    box-shadow: 0 10px 30px -10px rgba(2, 12, 27, 0.7);
 }
 
 .header nav a {
@@ -57,17 +62,17 @@ a {
     transform: translateY(-2px);
 }
 
-/* --- تقسيم المحتوى الرئيسي --- */
+/* --- Main Layout --- */
 .main-container {
     display: flex;
     max-width: 1300px;
     margin: 40px auto;
     width: 90%;
-    gap: 40px; /* مسافة بين الجانب والمحتوى */
+    gap: 40px; /* Gap between sidebar and content */
     flex: 1;
 }
 
-/* --- القائمة الجانبية اليسرى المتطورة --- */
+/* --- Left Sidebar --- */
 .left-nav {
     width: 300px;
     background-color: var(--card-bg);
@@ -77,10 +82,10 @@ a {
     align-items: center;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    align-self: flex-start; /* لكي لا تتمادى بالطول */
+    align-self: flex-start; /* Prevent height stretching */
 }
 
-/* الصورة الشخصية (أنيميشن خفيف) */
+/* Profile Picture */
 .profile-pic {
     width: 150px;
     height: 150px;
@@ -108,41 +113,28 @@ a {
     text-align: center;
 }
 
-/* أيقونات التواصل */
-.contact-links, .social-links {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.contact-links a, .social-links a {
-    display: block;
-    color: var(--text-sub);
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
+/* Social Links */
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
     margin-top: 20px;
 }
 
 .social-links a {
-    background-color: transparent;
-    border: 1px solid var(--accent-color);
     color: var(--accent-color);
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-weight: bold;
+    font-size: 28px; /* Larger icons */
+    transition: var(--transition);
+    display: inline-block;
 }
 
 .social-links a:hover {
-    background-color: rgba(100, 255, 218, 0.1);
+    color: #fff;
+    transform: translateY(-5px) scale(1.1); /* Lift and scale effect */
+    text-shadow: 0 0 15px var(--accent-color); /* Icon glow */
 }
 
-/* --- محتوى الصفحة الرئيسي (نظام البطاقات) --- */
+/* --- Main Content (Cards) --- */
 .content {
     flex: 1;
 }
@@ -157,7 +149,33 @@ a {
 }
 
 .content section:hover {
-    transform: translateY(-5px); /* تأثير عائم عند التمرير */
+    transform: translateY(-5px); /* Floating effect */
+}
+
+.contact-links a {
+    transition: var(--transition); 
+    display: inline-block; 
+    margin-bottom: 10px;
+}
+
+.contact-links a:hover {
+    color: var(--accent-color); 
+    transform: scale(1.05); 
+    text-shadow: 0 0 10px rgba(187, 134, 252, 0.6); 
+}
+
+/* About Me Pseudo-elements */
+.about-me-text::first-letter {
+    font-size: 3em;
+    color: var(--accent-color);
+    font-weight: bold;
+    float: left;
+    margin-right: 8px;
+    line-height: 1;
+}
+
+.about-me-text::after {
+    content: " ✨";
 }
 
 h2 {
@@ -168,7 +186,7 @@ h2 {
     align-items: center;
 }
 
-/* إضافة خط صغير قبل العنوان للتميز التقني */
+/* Tech-style heading accent */
 h2::before {
     content: "▹";
     color: var(--accent-color);
@@ -198,7 +216,7 @@ ul li {
     margin-bottom: 10px;
 }
 
-/* أيقونة قائمة مخصصة */
+/* Custom list icon */
 ul li::before {
     content: "▹";
     position: absolute;
@@ -206,7 +224,7 @@ ul li::before {
     color: var(--accent-color);
 }
 
-/* رابط القفز الداخلي */
+/* Fragment Link */
 a.fragment-link {
     color: var(--accent-color);
     font-weight: bold;
@@ -217,7 +235,7 @@ a.fragment-link:hover {
     text-decoration: underline;
 }
 
-/* --- تنسيق الجداول (Tech Style) --- */
+/* --- Table Styles (Tech Style) --- */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -228,23 +246,46 @@ table {
 }
 
 th, td {
-    border: 1px solid rgba(136, 146, 176, 0.2);
+    border: 1px solid rgba(187, 134, 252, 0.1);
     padding: 15px;
-    text-align: left;
+    text-align: center;
 }
 
 th {
-    background-color: rgba(17, 34, 64, 0.5);
+    background-color: rgba(30, 10, 60, 0.8);
     color: var(--accent-color);
 }
 
-/* تأثير التمرير على الجدول */
+/* Alternating rows background */
+tbody tr:nth-child(odd) {
+    background-color: rgba(187, 134, 252, 0.05);
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgba(30, 10, 60, 0.3);
+}
+
+/* Odd rows hover effect */
+tbody tr:nth-child(odd):hover td {
+    background-color: rgba(187, 134, 252, 0.2);
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+/* Even rows hover effect */
+tbody tr:nth-child(even):hover td {
+    background-color: rgba(100, 255, 218, 0.15);
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+/* Table row hover override */
 tr:hover td {
     background-color: rgba(100, 255, 218, 0.05);
     color: var(--text-main);
 }
 
-/* --- تنسيق نموذج التواصل --- */
+/* --- Contact Form --- */
 .form-group input[type="text"], 
 .form-group input[type="email"], 
 .form-group textarea {
@@ -286,15 +327,19 @@ tr:hover td {
     background-color: rgba(100, 255, 218, 0.1);
 }
 
-/* --- الفوتر --- */
+/* --- Footer --- */
 .footer {
     padding: 20px;
     text-align: center;
-    color: var(--text-sub);
-    font-size: 12px;
+    color: #ffffff; /* Clear white text */
+    background-color: rgba(30, 10, 60, 0.8); /* Dark purple background */
+    border-top: 1px solid rgba(187, 134, 252, 0.3); /* Light top border */
+    font-size: 14px; 
+    margin-top: auto;
+    letter-spacing: 1px;
 }
 
-/* --- تجاوب التصميم مع الشاشات (Responsive) --- */
+/* --- Responsive Design --- */
 @media (max-width: 1000px) {
     .main-container {
         flex-direction: column;
@@ -309,18 +354,19 @@ tr:hover td {
         justify-content: center;
     }
 }
-/* --- تنسيق أيقونات لغات البرمجة (المهارات) --- */
+
+/* --- Programming Skills Icons --- */
 .skills-icons {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px; /* المسافة بين الأيقونات */
+    gap: 15px; 
     margin-top: 15px;
 }
 
 .skill-item {
-    background-color: var(--card-bg); /* نفس خلفية البطاقات */
+    background-color: var(--card-bg); 
     border: 1px solid rgba(187, 134, 252, 0.1);
-    border-radius: var(--border-radius);
+    border-radius: 12px;
     padding: 10px;
     width: 90px;
     text-align: center;
@@ -330,7 +376,7 @@ tr:hover td {
 
 .skill-item:hover {
     border-color: rgba(187, 134, 252, 0.2);
-    transform: translateY(-5px); /* تأثير عائم */
+    transform: translateY(-5px); /* Floating effect */
 }
 
 .skill-icon {
