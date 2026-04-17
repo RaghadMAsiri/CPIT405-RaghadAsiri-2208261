@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Player Stats Dashboard</title>
+
+    <style>
+        /* --- Default Light Mode Styles --- */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 40px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 25px 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .btn-dark-mode {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #efefef;
+            color: #333;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-dark-mode:hover {
+            background-color: #e2e2e2;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .controls input,
+        .controls select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 200px;
+            outline: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        th {
+            background-color: #fafafa;
+            font-weight: bold;
+            cursor: pointer;
+            /* To indicate sorting capability */
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+
+        th:hover {
+            background-color: #f0f0f0;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* --- Dark Mode Styles --- */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e4e4e4;
+        }
+
+        body.dark-mode .dashboard-container {
+            background-color: #1e1e1e;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .btn-dark-mode,
+        body.dark-mode .controls input,
+        body.dark-mode .controls select {
+            background-color: #2c2c2c;
+            color: #e4e4e4;
+            border-color: #444;
+        }
+
+        body.dark-mode .btn-dark-mode:hover {
+            background-color: #3a3a3a;
+        }
+
+        body.dark-mode th {
+            background-color: #2a2a2a;
+            border-bottom-color: #444;
+        }
+
+        body.dark-mode th:hover {
+            background-color: #333;
+        }
+
+        body.dark-mode td {
+            border-bottom-color: #333;
+        }
+
+        body.dark-mode tbody tr:hover {
+            background-color: #252525;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>NBA Player Stats Dashboard</h1>
+            <button id="toggleDarkMode" class="btn-dark-mode">Toggle Dark Mode</button>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search players...">
+            <select id="teamFilter">
+                <option value="All">All</option>
+                <option value="PHI">PHI</option>
+                <option value="NYK">NYK</option>
+                <option value="OKC">OKC</option>
+                <option value="CLE">CLE</option>
+            </select>
+        </div>
+
+        <table id="statsTable">
+            <thead>
+                <tr>
+                    <th data-sort="name">Name ↕</th>
+                    <th data-sort="team">Team ↕</th>
+                    <th data-sort="points">Points ↕</th>
+                    <th data-sort="rebounds">Rebounds ↕</th>
+                    <th data-sort="assists">Assists ↕</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 1. Player Data Array
+        const playersData = [
+            { name: "Joel Embiid", team: "PHI", points: 33, rebounds: 10.8, assists: 5.7 },
+            { name: "Jalen Brunson", team: "NYK", points: 32.4, rebounds: 3.3, assists: 7.5 },
+            { name: "Shai Gilgeous-Alexander", team: "OKC", points: 30.2, rebounds: 7.2, assists: 6.4 },
+            { name: "Tyrese Maxey", team: "PHI", points: 29.8, rebounds: 5.2, assists: 6.8 },
+            { name: "Donovan Mitchell", team: "CLE", points: 29.6, rebounds: 5.4, assists: 4.7 }
+        ];
+
+        // 2. Select DOM Elements
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const teamFilter = document.getElementById('teamFilter');
+        const toggleDarkModeBtn = document.getElementById('toggleDarkMode');
+        const tableHeaders = document.querySelectorAll('th');
+
+        // Variables for state
+        let currentDisplayedData = [...playersData];
+        let sortDirection = 1; // 1 for ascending, -1 for descending
+
+        // 3. Render Table Function
+        function renderTable(data) {
+            tableBody.innerHTML = ''; // Clear existing rows
+            data.forEach(player => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${player.name}</td>
+                    <td>${player.team}</td>
+                    <td>${player.points}</td>
+                    <td>${player.rebounds}</td>
+                    <td>${player.assists}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // 4. Search and Filter Function
+        function filterData() {
+            const searchValue = searchInput.value.toLowerCase();
+            const filterValue = teamFilter.value;
+
+            currentDisplayedData = playersData.filter(player => {
+                const matchesSearch = player.name.toLowerCase().includes(searchValue);
+                const matchesTeam = filterValue === "All" || player.team === filterValue;
+                return matchesSearch && matchesTeam;
+            });
+
+            renderTable(currentDisplayedData);
+        }
+
+        // 5. Event Listeners for Filtering
+        searchInput.addEventListener('input', filterData);
+        teamFilter.addEventListener('change', filterData);
+
+        // 6. Event Listener for Dark Mode
+        toggleDarkModeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // 7. Event Listeners for Sorting (Optional requirement fulfilled)
+        tableHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const key = header.getAttribute('data-sort');
+
+                currentDisplayedData.sort((a, b) => {
+                    if (a[key] > b[key]) return 1 * sortDirection;
+                    if (a[key] < b[key]) return -1 * sortDirection;
+                    return 0;
+                });
+
+                sortDirection *= -1; // Flip the direction for the next click
+                renderTable(currentDisplayedData);
+            });
+        });
+
+        // Initial Data Load
+        renderTable(playersData);
+    </script>
+</body>
+
+</html>
