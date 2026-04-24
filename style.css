@@ -90,6 +90,7 @@ a {
     width: 150px;
     height: 150px;
     border-radius: 50%;
+    object-fit: cover;
     border: 2px solid var(--accent-color);
     margin-bottom: 25px;
     transition: var(--transition);
