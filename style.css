@@ -153,10 +153,17 @@ a {
     transform: translateY(-5px); /* Floating effect */
 }
 
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 25px; 
+    margin-bottom: 15px;
+}
+
 .contact-links a {
     transition: var(--transition); 
-    display: inline-block; 
-    margin-bottom: 10px;
+    display: flex; 
+    align-items: center;
 }
 
 .contact-links a:hover {
@@ -164,7 +171,6 @@ a {
     transform: scale(1.05); 
     text-shadow: 0 0 10px rgba(187, 134, 252, 0.6); 
 }
-
 /* About Me Pseudo-elements */
 .about-me-text::first-letter {
     font-size: 3em;
